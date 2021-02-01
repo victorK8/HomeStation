@@ -1,4 +1,4 @@
-/// Example of api-rest service on Actix Framework
+/// EModule for sensor's hub purposes
 /// 
 /// Hub Module 
 ///
@@ -6,33 +6,18 @@
 
 use actix_web::{get, post, web, HttpResponse, Responder}; /// Actix Framework Pkgs.
 use serde::{Serialize, Deserialize}; /// Serde Pkg.
-use std::process::Command; /// Cmd Pkgs.
-use std::println; /// Basic print with \n
 
+///********************************** DATA STRUCTS ************************************
 
-///********************************** DATA STRUCTS ***************************************
-
-/// Server Status
+/// Lights Struct
 #[derive(Serialize)]
-pub struct Status {
-    running: bool,
-    timestamp: String,
+pub struct Sensor {
+	id: u8,
+ 	temperature: f32,
+ 	humidity: f32,
 }
 
-/// User Auth Request Struct
-#[derive(Deserialize)]
-pub struct RequestUser{
-	username: String,
-	password: String,
-}
-
-/// Command Request Struct
-#[derive(Deserialize)]
-pub struct RequestCMD {
-    commands: String,
-}
-
-/// Request Struct
+/// Result Struct
 #[derive(Serialize)]
 pub struct Response {
     result: bool,
@@ -40,77 +25,52 @@ pub struct Response {
 
 ///********************************** FUNTIONS *****************************************
 
-/// Check user
-fn authenticate(user:&str, pwd:&str) -> bool{
-
-    let result:bool;
-
-    // Good user settings
-    let gguser: &str = "vmalumbres";
-    let ggpwd: &str = "VM4lumbr3s";
-
-    // Check
-    if gguser.eq(user) && ggpwd.eq(pwd) {
-        result = true;
-    }else{
-        result = false;
-    }
-
-    // Return result
-    result
-}
 
 ///********************************** HTTP METHODS *************************************
 
-/// Execute POST method
-#[post("/Execute")]
-pub async fn execute_command(request: web::Json<RequestCMD>) -> impl Responder {
+/// Status of a light by id
+#[get("/Sensors")]
+pub async fn all_sensors() -> impl Responder {
 
-    println!("[LOG] Hub module: Command Line Executer");
-
-
-    let process = Command::new(&request.commands)
-        .status()
-        .expect("Failed to execute command");
-
-
-    if process.success() {
-        HttpResponse::Ok().json(Response { result: true })
-    } else {
-        HttpResponse::Ok().json(Response { result: false })
-    }
-
-}
-
-/// Auth. POST method
-#[post("/Auth")]
-pub async fn check_user(request: web::Json<RequestUser>) -> impl Responder {
-
-    println!("[LOG] Hub module: User Auth.");
-
-    if authenticate(&request.username, &request.password) {
-        println!("[LOG] User's Access Allowed!");
-        HttpResponse::Ok().json(Response { result: true })
-    } else {
-        println!("[LOG] User's Access Denied!");
-        HttpResponse::Ok().json(Response { result: false })
-    }
-}
-
-/// Status of hub GET method
-#[get("/Status")]
-pub async fn hub_status() -> impl Responder {
-
-	// Status
-	let hub_status = Status{
-		running: true,
-		timestamp:String::from("26/01/2021"),
+	// Status. Some dummy example
+	let status = Sensor{
+		id: 254,
+	    r: 100, 
+	    g: 100,
+	    b: 100,
+	    brightness: 100,
+	    intensity: 100,
 	};
 
 	// Logs
-    println!("[LOG] Hub module: Hub Status Shadow ");
+    println!("[LOG] Hub module: All Lights Status Shadow ");
 
     // Return as http-response with a json
-    HttpResponse::Ok().json(hub_status)
+    HttpResponse::Ok().json(status)
+
+}
+
+/// Status of a light by id
+#[get("/Status/{id}")]
+pub async fn lights_by_id(path: web::Path<(u8,)>) -> impl Responder {
+
+	// id
+	let id_of_light:u8 = path.0;
+
+	// Status. Some dummy example
+	let status = Light{
+		id: id_of_light,
+	    r: 100, 
+	    g: 100,
+	    b: 100,
+	    brightness: 100,
+	    intensity: 100,
+	};
+
+	// Logs
+    println!("[LOG] Hub module: {} Hub Status Shadow ", id_of_light);
+
+    // Return as http-response with a json
+    HttpResponse::Ok().json(status)
 
 }

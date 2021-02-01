@@ -1,4 +1,4 @@
-/// Example of api-rest service on Actix Framework
+/// Ḿodule for web page
 /// 
 /// Web Module 
 ///

@@ -13,8 +13,8 @@ mod hub {
     pub mod hub;
 }
 
-mod lights {
-	pub mod lights;
+mod user {
+	pub mod user;
 }
 
 mod webpage {
