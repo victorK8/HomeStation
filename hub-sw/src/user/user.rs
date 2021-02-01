@@ -97,20 +97,3 @@ pub async fn check_user(request: web::Json<RequestUser>) -> impl Responder {
     }
 }
 
-/// Status of hub GET method
-#[get("/Status")]
-pub async fn hub_status() -> impl Responder {
-
-	// Status
-	let hub_status = Status{
-		running: true,
-		timestamp:String::from("26/01/2021"),
-	};
-
-	// Logs
-    println!("[LOG] User module: Hub Status Shadow ");
-
-    // Return as http-response with a json
-    HttpResponse::Ok().json(hub_status)
-
-}

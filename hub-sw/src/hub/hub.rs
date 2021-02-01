@@ -6,24 +6,38 @@
 
 use actix_web::{get, post, web, HttpResponse, Responder}; /// Actix Framework Pkgs.
 use serde::{Serialize, Deserialize}; /// Serde Pkg.
+use std::fs::File; /// File handling pkg
+use std::io::prelude::*;
+use std::string::String; // String pkg.
+
+///********************************** CONST ************************************
+const NUMBER_OF_SENSORS:usize = 2;
 
 ///********************************** DATA STRUCTS ************************************
 
-/// Lights Struct
+/// Sensor Struct
 #[derive(Serialize)]
 pub struct Sensor {
 	id: u8,
  	temperature: f32,
  	humidity: f32,
+ 	stamp: String,
 }
 
+/// Network Struct
+#[derive(Serialize)]
+pub struct Network {
+	things: [Sensor;NUMBER_OF_SENSORS],
+ 	number_of_things: u8,
+}
 /// Result Struct
 #[derive(Serialize)]
 pub struct Response {
     result: bool,
 }
 
-///********************************** FUNTIONS *****************************************
+
+///********************************** FUNCTIONS *****************************************
 
 
 ///********************************** HTTP METHODS *************************************
@@ -34,16 +48,14 @@ pub async fn all_sensors() -> impl Responder {
 
 	// Status. Some dummy example
 	let status = Sensor{
-		id: 254,
-	    r: 100, 
-	    g: 100,
-	    b: 100,
-	    brightness: 100,
-	    intensity: 100,
+		id: 0,
+	 	temperature: 12.22,
+	 	humidity: 22.22,
+	 	stamp: String::from("dd/mm/yyyy - HH:MM:SS"),
 	};
 
 	// Logs
-    println!("[LOG] Hub module: All Lights Status Shadow ");
+    println!("[LOG] Hub module: All Sensors Status Shadows ");
 
     // Return as http-response with a json
     HttpResponse::Ok().json(status)
@@ -51,24 +63,23 @@ pub async fn all_sensors() -> impl Responder {
 }
 
 /// Status of a light by id
-#[get("/Status/{id}")]
-pub async fn lights_by_id(path: web::Path<(u8,)>) -> impl Responder {
+#[get("/Sensors/{id}")]
+pub async fn sensors_by_id(path: web::Path<(u8,)>) -> impl Responder {
 
-	// id
-	let id_of_light:u8 = path.0;
+	// Get id from url
+	let id_of_sensor:u8 = path.0;
 
 	// Status. Some dummy example
-	let status = Light{
-		id: id_of_light,
-	    r: 100, 
-	    g: 100,
-	    b: 100,
-	    brightness: 100,
-	    intensity: 100,
+	let status = Sensor{
+		id: id_of_sensor,
+	 	temperature: 12.22,
+	 	humidity: 22.22,
+	 	stamp: String::from("dd/mm/yyyy - HH:MM:SS"),
+
 	};
 
 	// Logs
-    println!("[LOG] Hub module: {} Hub Status Shadow ", id_of_light);
+    println!("[LOG] Hub module: {} Sensor Status Shadow ", id_of_sensor);
 
     // Return as http-response with a json
     HttpResponse::Ok().json(status)

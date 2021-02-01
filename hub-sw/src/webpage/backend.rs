@@ -11,8 +11,8 @@ use std::path::Path; // path pkg
 
 
 ///********************************** PATHS *************************************
-const WD: &str = "/home/victor/Actix/api-rest/src";
-const TEMPLATES: &str = "/home/victor/Actix/api-rest/src/templates";
+const WD: &str = "/home/victor/HomeStation/hub-sw/src";
+const TEMPLATES: &str = "/home/victor/HomeStation/hub-sw/src/templates";
 
 ///********************************** HTTP METHODS *************************************
 

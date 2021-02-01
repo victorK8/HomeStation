@@ -1,10 +1,9 @@
-/// Example of api-rest service on Actix Framework
+/// Main of Hub-Server App
 /// 
 /// Server App
 ///
 /// By Victor M. - CIRCE - Based on the next page
 ///
-/// https://codeburst.io/how-to-build-a-rest-api-to-execute-system-commands-using-actix-rust-a-step-by-step-guide-e257d5442b16
 
 use actix_web::{web, App, HttpServer}; /// Actix Framework Pkgs.
 
@@ -31,15 +30,14 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
             .service(
-                web::scope("/Hub/")
-                    .service(hub::hub::execute_command)
-                    .service(hub::hub::check_user)
-                    .service(hub::hub::hub_status)
+                web::scope("/User/")
+                    .service(user::user::execute_command)
+                    .service(user::user::check_user)
             )
             .service(
-                web::scope("/Lights/")
-                    .service(lights::lights::lights_by_id)
-                    .service(lights::lights::all_lights)
+                web::scope("/Hub/")
+                    .service(hub::hub::sensors_by_id)
+                    .service(hub::hub::all_sensors)
             )
             .service(webpage::backend::index)
     })
