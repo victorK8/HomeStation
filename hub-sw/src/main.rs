@@ -36,8 +36,7 @@ async fn main() -> std::io::Result<()> {
             )
             .service(
                 web::scope("/Hub/")
-                    .service(hub::hub::sensors_by_id)
-                    .service(hub::hub::all_sensors)
+                    .service(hub::hub::get_sensors)
             )
             .service(webpage::backend::index)
     })
